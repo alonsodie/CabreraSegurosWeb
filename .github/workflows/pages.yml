@@ -1,0 +1,54 @@
+name: Publicar Cabrera Seguros
+
+on:
+  push:
+    branches: [main, desarrollo]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Descargar produccion
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: produccion
+
+      - name: Descargar desarrollo
+        uses: actions/checkout@v4
+        with:
+          ref: desarrollo
+          path: pruebas
+
+      - name: Preparar sitio
+        run: |
+          mkdir -p _site/desarrollo
+          cp -R produccion/. _site/
+          cp -R pruebas/. _site/desarrollo/
+          rm -rf _site/.git _site/.github
+          rm -rf _site/desarrollo/.git _site/desarrollo/.github
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Subir archivos
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v4
