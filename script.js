@@ -1,6 +1,6 @@
 // CONFIGURACIÓN: agregá el WhatsApp comercial con código de país, sin + ni espacios.
 // Ejemplo para Uruguay: '59899123456'. Hasta configurarlo, se copia el mensaje.
-const WHATSAPP_NUMBER = '';
+const WHATSAPP_NUMBER = '59898033929';
 const menu = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.nav-links');
 menu.addEventListener('click', () => { const opened=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(opened));menu.textContent=opened?'✕':'☰'; });
